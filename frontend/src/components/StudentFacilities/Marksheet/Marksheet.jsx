@@ -3,12 +3,10 @@ import styles from "./Marksheet.module.css";
 import {
   ConnectWallet,
   Web3Button,
-  useContract,
-  useContractRead,
 } from "@thirdweb-dev/react";
 import toast from "react-hot-toast";
 
-const address = "0x89dFD8fc17D913dFA722ef30640F82FaBB5164eB";
+const address = "0x53B1A8479751671909E5A33a1b24779569569033";
 
 const Marksheet = () => {
   const semesterSelectionRef = useRef();
@@ -53,6 +51,7 @@ const Marksheet = () => {
           ]);
           aggregrateRef.current = 0;
          const data = (result?.map(item=>JSON.parse(item)));
+         console.log(data)
          for(let i of data)
           aggregrateRef.current += parseInt(i?.marks)
          setSubjectMarksArray(data);

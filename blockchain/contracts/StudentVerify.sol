@@ -156,8 +156,8 @@ contract StudentVerify is TeacherContract {
     }
 
     //Insert students
-    //2, 11/11/2000, 2282050, MCA, 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4, Niladri Chatterjee
-    //2, 01/01/2000, 2282001, MCA, 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2, Rohan Mondal
+    // MCA,2, 2282050, 68, MCAP2105, controller, 0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db, all okay
+    // 2, 01/01/2000, 2282001, MCA, 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2, Rohan Mondal
     //2, 07/07/2001, 2282022, MCA, 0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db, Shreya Das
     //2, 31/08/2000, 2282027, MCA, 0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB, Prapti Das
     //2, 27/04/2001, 2282038, MCA, 0x617F2E2fD72FD9D5503197092aC168c91465E7f2, Anuraag Karmakar
@@ -176,6 +176,25 @@ contract StudentVerify is TeacherContract {
 
         return  semToStdArray[_sem];
     }*/
+    function getStudentAchievementFromRoll(
+        uint256 _roll,
+        string memory achievementType
+    ) public view returns (string[] memory) {
+        return rollToStudentData[_roll].achievements[achievementType];
+    }
+
+    //
+    function setAchievementStudent(
+        uint256 _roll,
+        string memory achievementType,
+        string memory achievement
+    ) public {
+        rollToStudentData[_roll].achievements[achievementType].push(
+            achievement
+        );
+    }
+
+    //2282050, academic, Certification in IOT edge Computing
 
     //this function will be called to update marks of a student in a subject by an authority level
     function addMarks(
@@ -216,5 +235,5 @@ contract StudentVerify is TeacherContract {
     }
     //Inserting marks
     //MCA, 2, 2282050, 68, MCAP2105, examiner, 0xcad7147C003851C2c4c358487055065A9626f9eD,
-    //MCA, 2, 2282050, 68, MCAP2105, headExaminer, 0xcad7147C003851C2c4c358487055065A9626f9eD, All Okay
+    //MCA, 2, 2282050, 68, MCAP2105, controller, 0xcad7147C003851C2c4c358487055065A9626f9eD, All Okay
 }

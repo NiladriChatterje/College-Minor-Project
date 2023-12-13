@@ -10,7 +10,7 @@ const StudentFacilities = () => {
     <div id={styles.Container}>
       <section id={styles.facilityContainer}>
         {StudentFacilitiesData?.map((item, i) => (
-          <Cards key={i} item={item} />
+          <Cards key={i} item={item} onClick={()=>navigate(item?.link)} />
         ))}
       </section>
       <hr />

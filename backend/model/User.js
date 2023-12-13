@@ -12,7 +12,7 @@ export default (sequelize, Datatypes) => {
                 allowNull: false,
             },
             authorityLevel: {
-                type: Datatypes.ENUM("examiner", "scrutinizer", "head_examiner", "admin", "tabulator", "controller_of_examination", "student"),
+                type: Datatypes.ENUM("examiner", "scrutinizer", "headExaminer", "admin", "tabulator", "controller", "student"),
             },
         },
         {

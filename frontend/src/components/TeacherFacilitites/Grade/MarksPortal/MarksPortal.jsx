@@ -12,7 +12,7 @@ const precedenceAuthority = [
   { authority: "controller", dataToBeSetPreviously: "tabulator" },
 ];
 
-const address = "0x89dFD8fc17D913dFA722ef30640F82FaBB5164eB";
+const address = "0x53B1A8479751671909E5A33a1b24779569569033";
 
 const MarksPortal = ({ department, semester, subject, authorityLevel }) => {
   const [studentList, setStudentList] = useState(() => []);
@@ -207,8 +207,8 @@ const MarksPortal = ({ department, semester, subject, authorityLevel }) => {
         parseInt(newData[i].marks),
         subject?.subject_code,
         authorityLevel,
-        temp,
         Address,
+        temp,
       ];
       console.log(params);
       const {
@@ -355,7 +355,7 @@ const MarksPortal = ({ department, semester, subject, authorityLevel }) => {
           </div>
         ))}
       </div>
-      <button onClick={() => updateToDB()}>update</button>
+      <button style={{margin:'auto'}} onClick={() => updateToDB()}>update</button>
     </div>
   );
 };

@@ -80,7 +80,7 @@ export const getSubjectListByDept = async (req) => {
         attributes: ["semester"],
         raw: true,
     })
-    console.log(data);
+    // console.log(data);
     let obj = [];
     for (const info of data) {
         let otherTableData = {
@@ -115,7 +115,7 @@ export const getStudentListBySubjectDeptSem = async (info) => {
             attributes: [],
             raw: true,
         }).then(data => {
-            console.log(data)
+            // console.log(data)
             let obj = []
             for (const item of data) {
                 obj.push({
@@ -158,7 +158,7 @@ export const getStudentListBySubjectDeptSem = async (info) => {
 // };
 
 export const getStudentMarks = async (info) => {
-    console.log(info);
+    // console.log(info);
 
     try {
         const studentMarks = await marks.findAll({

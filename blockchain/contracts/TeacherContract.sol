@@ -53,6 +53,6 @@ contract TeacherContract {
         IDToTeacherDetails[_walletAddress] = temp;
         arr.push(temp);
     }
-    //true, 1, Sumon Ghosh, 11/11/1985, 0xcad7147C003851C2c4c358487055065A9626f9eD, examiner, teacher
-    //true, 2. Souvik Basu, 20/10/1972, 0xcad7147C003851C2c4c358487055065A9626f9eD, examiner, HOD
+    //true, 2, Sumon Ghosh, 20/10/1975, MCA, 0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db, controller, HOD
+    //true, 3, Souvik Basu, 20/10/1973, MCA, 0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db, examiner, HOD
 }
