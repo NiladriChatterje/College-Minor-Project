@@ -3,10 +3,17 @@
     box-shadow: 0 0 15px 5px -3px grey;
     background-color: white;
     display: flex;
+    gap: 10px;
     justify-content: center;
     align-items: center;
+    transition: all 100ms;
 }
 
 .card div {
     font-size: 0.85em;
+}
+
+.card:hover{
+    transform: scale(1.02);
+    box-shadow: 0 0 15px -6px white;
 }

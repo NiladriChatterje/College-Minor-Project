@@ -1,10 +1,22 @@
-.selection{
+.selection {
     background-color: rgb(237, 237, 237);
     outline: none;
-    border-style:none;
+    border-style: none;
     border-radius: 8px;
     color: black;
     margin: 0 10px;
     font-weight: 500;
     padding: 8px 16px;
+}
+
+.row {
+    margin: 10px 0;
+    width: 35vw;
+    display: flex;
+    background-color: rgb(251, 251, 251);
+    color: rgb(11, 11, 11);
+    border-radius: 10px;
+
+    justify-content: space-between;
+    padding: 10px;
 }

@@ -6,6 +6,7 @@ import {
   StudentFacilities,
   TeacherFacilities,
   Grade,
+  StudentDetails,
   Marksheet,
 } from "./components";
 import { Toaster } from "react-hot-toast";
@@ -21,6 +22,7 @@ function App() {
           <Route path={"/studentfacilities"} element={<StudentFacilities />} />
           <Route path={"/teacherfacilities"} element={<TeacherFacilities />} />
           <Route path={"/result/departments"} element={<Marksheet />} />
+          <Route path={"/studentdetails"} element={<StudentDetails />} />
           <Route path={"/teacherfacilities/grade"} element={<Grade />} />
         </Routes>
       </section>

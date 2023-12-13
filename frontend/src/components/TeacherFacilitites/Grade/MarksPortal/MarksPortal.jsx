@@ -12,7 +12,7 @@ const precedenceAuthority = [
   { authority: "controller", dataToBeSetPreviously: "tabulator" },
 ];
 
-const address = "0x659B8d0153B8F233Bde6768e28ACa5aCa1232234";
+const address = "0x89dFD8fc17D913dFA722ef30640F82FaBB5164eB";
 
 const MarksPortal = ({ department, semester, subject, authorityLevel }) => {
   const [studentList, setStudentList] = useState(() => []);

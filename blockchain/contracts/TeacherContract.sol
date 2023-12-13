@@ -13,9 +13,14 @@ contract TeacherContract {
         string designation;
     }
 
+    //wallet address => each teacher's details
     mapping(address => TeacherDetails) public IDToTeacherDetails;
+
+    //All teachers list
     TeacherDetails[] arr;
 
+    //if the wallet address isn't found any teacher's record then he/she has no right
+    //to provide or edit student's marks on any subject
     modifier authority(address _address) {
         require(
             IDToTeacherDetails[_address].checkExistence != false,
@@ -48,4 +53,6 @@ contract TeacherContract {
         IDToTeacherDetails[_walletAddress] = temp;
         arr.push(temp);
     }
+    //true, 1, Sumon Ghosh, 11/11/1985, 0xcad7147C003851C2c4c358487055065A9626f9eD, examiner, teacher
+    //true, 2. Souvik Basu, 20/10/1972, 0xcad7147C003851C2c4c358487055065A9626f9eD, examiner, HOD
 }

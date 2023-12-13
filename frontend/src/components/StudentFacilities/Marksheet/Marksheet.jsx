@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import styles from "./Marksheet.module.css";
 import {
   ConnectWallet,
@@ -8,17 +8,23 @@ import {
 } from "@thirdweb-dev/react";
 import toast from "react-hot-toast";
 
-const address = "0x9759051E0493DA9bB86E9E0708CbF0c26Ea55cC3";
+const address = "0x89dFD8fc17D913dFA722ef30640F82FaBB5164eB";
 
 const Marksheet = () => {
   const semesterSelectionRef = useRef();
+  const [semesterSelect, setSemesterSelect] = useState(() => 1);
+  const [subjectMarksArray,setSubjectMarksArray] = useState(()=>[]);
+  const aggregrateRef = useRef(0);
   function selectSem(e) {
+  
     console.log(e.target.value);
+    setSemesterSelect(e.target.value);
   }
   const rollRef = useRef();
 
   return (
     <div>
+      <ConnectWallet style={{ position: "absolute", right: 10 }} />
       <input
         className={styles.selection}
         ref={rollRef}
@@ -41,14 +47,35 @@ const Marksheet = () => {
       <Web3Button
         contractAddress={address}
         action={async (contract) => {
-          const result = await contract.call("rollToStudentData", [2282022]);
-          console.log(result);
+          const result = await contract.call("returnPerSemSubjectMarks", [
+            parseInt(rollRef.current.value),
+            parseInt(semesterSelect),
+          ]);
+          aggregrateRef.current = 0;
+         const data = (result?.map(item=>JSON.parse(item)));
+         for(let i of data)
+          aggregrateRef.current += parseInt(i?.marks)
+         setSubjectMarksArray(data);
         }}
-        onSuccess={() => toast.success("connection successful with Blockchain")}
+        onSuccess={() => toast.success("Data Fetch successful with Blockchain")}
       >
         Fetch
       </Web3Button>
-      <ConnectWallet style={{ position: "absolute", right: 10 }} />
+      <div>
+        <div style={{display:'flex',justifyContent:'space-between',width:'35vw',
+      backgroundColor:'rgb(22, 3, 59)',color:'white',margin:'10px 0',
+      borderRadius:10,padding:'2px 20px'}}><h4>Subject Code</h4><h4>Marks</h4></div>
+      {subjectMarksArray?.map((item,i)=>{
+        
+        return (<div
+        className={styles.row}
+        key={i}>
+          <span>{item?.subject_code}</span>
+          <span>{item?.marks}</span>
+        </div>)})}
+      </div>
+      <hr />
+      <div style={{display:'flex',justifyContent:'flex-end',width:'35vw',padding:10}}><span>{aggregrateRef.current}</span></div>
     </div>
   );
 };

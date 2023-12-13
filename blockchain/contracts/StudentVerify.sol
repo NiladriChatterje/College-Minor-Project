@@ -7,10 +7,10 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 contract StudentVerify is TeacherContract {
     mapping(uint8 => studentData[]) public semToStdArray;
 
+    //Each Student Details
     struct studentData {
         uint256 rollNo;
         string name;
-        string department;
         string dob;
         string dept;
         address walletAddress;
@@ -19,31 +19,26 @@ contract StudentVerify is TeacherContract {
         mapping(uint8 => uint8) SGPA;
     }
 
+    //Subject Details (nothing related to student records directly)
     struct subject {
         string sub_name;
         string sub_code;
     }
 
-    struct number {
-        string sub_code;
-        uint8 semester;
-        string authority_level;
-        uint256 marks;
-        string reason;
-    }
-
     subject[] public subjectList;
     mapping(uint256 => studentData) public rollToStudentData;
-    //department => semester => student_roll => subject_Code => authorityLevel =>
+    //department => semester => student_roll => subject_Code => authorityLevel => marks(to be inserted)
     mapping(string => mapping(uint8 => mapping(uint256 => mapping(string => mapping(string => uint8)))))
         public rollToSubCodeNum;
+
+    //department => semester => student_roll => subject_Code => authorityLevel => boolean(to be set true if number inserted)
     mapping(string => mapping(uint8 => mapping(uint256 => mapping(string => mapping(string => bool)))))
         public authoritylevelCheck;
-    //marks only put by authority level
-    mapping(uint256 => string[]) public stdPerSubjectMarks;
-    //roll to number by authority level
-    mapping(uint256 => number) public StdMarks;
 
+    //Roll-Number => Semester => "{subject_code,marks} only pushed when controller insert the data"
+    mapping(uint256 => mapping(uint8 => string[])) stdPerSubjectMarks;
+
+    //check if remarks is given by authority level other than examiner
     modifier remarksExceptExaminer(
         string memory remarks,
         string memory authorityLevel
@@ -74,13 +69,24 @@ contract StudentVerify is TeacherContract {
         _;
     }
 
+    //All subjects provided by the university
     function setSubjects(
         string memory sub_name,
         string memory sub_code
-    ) internal {
+    ) public {
         subjectList.push(subject(sub_name, sub_code));
     }
 
+    //List of subjects provided per sem to a student
+    function returnPerSemSubjectMarks(
+        uint256 _roll,
+        uint8 _sem
+    ) public view returns (string[] memory) {
+        string[] storage temp = stdPerSubjectMarks[_roll][_sem];
+        return temp;
+    }
+
+    //(no strict constraint for simplicity) not mandatory for testing
     function assignSubjectToStudent(
         uint256 _roll,
         uint8 semester,
@@ -94,7 +100,6 @@ contract StudentVerify is TeacherContract {
             sub_name,
             "}"
         );
-
         rollToStudentData[_roll].semester_subjectCodes[semester].push(temp);
         for (uint i = 0; i < semToStdArray[semester].length; i++) {
             if (semToStdArray[semester][i].rollNo == _roll) {
@@ -112,6 +117,7 @@ contract StudentVerify is TeacherContract {
         }
     }
 
+    //view function
     function marksWithRollAndSubCode(
         string memory department,
         uint8 _sem,
@@ -149,6 +155,14 @@ contract StudentVerify is TeacherContract {
         semToStdArray[_sem][length].name = name;
     }
 
+    //Insert students
+    //2, 11/11/2000, 2282050, MCA, 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4, Niladri Chatterjee
+    //2, 01/01/2000, 2282001, MCA, 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2, Rohan Mondal
+    //2, 07/07/2001, 2282022, MCA, 0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db, Shreya Das
+    //2, 31/08/2000, 2282027, MCA, 0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB, Prapti Das
+    //2, 27/04/2001, 2282038, MCA, 0x617F2E2fD72FD9D5503197092aC168c91465E7f2, Anuraag Karmakar
+
+    //total subjects a student has pursued
     function fetchSubjectListOfStudent(
         uint256 _roll,
         uint8 _sem
@@ -171,12 +185,12 @@ contract StudentVerify is TeacherContract {
         uint8 _Marks,
         string memory subject_code,
         string calldata authorityLevel,
-        string memory remarks,
-        address _writerAddress
+        address __walletAddress,
+        string memory remarks
     )
         public
         remarksExceptExaminer(remarks, authorityLevel)
-        authority(_writerAddress)
+        authority(__walletAddress)
     {
         rollToSubCodeNum[department][_sem][_rollNo][subject_code][
             authorityLevel
@@ -185,16 +199,22 @@ contract StudentVerify is TeacherContract {
             authorityLevel
         ] = true;
 
-        if (keccak256(abi.encodePacked(authorityLevel)) == "controller") {
-            uint length = stdPerSubjectMarks[_rollNo].length;
-            stdPerSubjectMarks[_rollNo].push();
-            stdPerSubjectMarks[_rollNo][length] = string.concat(
-                "{subject_code:",
-                subject_code,
-                ",marks:",
-                Strings.toString(_Marks),
-                "}"
+        if (
+            keccak256(abi.encodePacked(authorityLevel)) ==
+            keccak256(abi.encodePacked("controller"))
+        ) {
+            stdPerSubjectMarks[_rollNo][_sem].push(
+                string.concat(
+                    '{"subject_code":"',
+                    subject_code,
+                    '","marks":"',
+                    Strings.toString(_Marks),
+                    '"}'
+                )
             );
         }
     }
+    //Inserting marks
+    //MCA, 2, 2282050, 68, MCAP2105, examiner, 0xcad7147C003851C2c4c358487055065A9626f9eD,
+    //MCA, 2, 2282050, 68, MCAP2105, headExaminer, 0xcad7147C003851C2c4c358487055065A9626f9eD, All Okay
 }
