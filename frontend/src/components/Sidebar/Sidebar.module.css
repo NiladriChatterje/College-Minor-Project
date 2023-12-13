@@ -1,0 +1,37 @@
+#sidebarContainer {
+    height: 90%;
+    padding: 2em 1.5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+    border-right: 1px solid rgb(31, 31, 31);
+}
+
+#Logo {
+    border-radius: 15px;
+    width: 130px;
+    object-fit: contain;
+    padding: 1em;
+    box-shadow: 0 0 15px -8px grey;
+}
+
+.chips {
+    display: block;
+    width: 200px;
+    padding: 3px 0.6em;
+    box-shadow: 0 0 15px -8px grey;
+    border-radius: 10px;
+    margin: 10px 0;
+    cursor: 'pointer';
+    color: inherit;
+}
+
+.chips:hover {
+    background: white;
+}
+
+#facilities {
+    overflow: clip auto;
+    width: 100%;
+}

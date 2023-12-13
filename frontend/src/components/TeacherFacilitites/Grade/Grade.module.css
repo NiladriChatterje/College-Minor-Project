@@ -1,0 +1,36 @@
+#gradeContainer{
+   width: 100%;
+   display: flex;
+   gap:35px;
+   flex-wrap: wrap;
+   width: max-content;
+}
+.Btn{
+    text-align: left;
+    border-style: none;
+    border-radius: 10px;
+    padding: 5px 10px;
+    background-color: rgb(238, 238, 238);
+    font-weight: 600;
+    font-size: 0.85em;
+    color: black;
+    margin: 5px 0;
+}
+
+.subsectionContainer{
+    display: flex;
+    flex-direction: column;
+    overflow: clip auto;
+    height: 100%;
+    max-height: 85vh;
+}
+
+.Btn:focus{
+    background-color: white;
+    box-shadow: 0 0 10px -5px white;
+}
+@media all and (max-width:1200px){
+    #gradeContainer{
+        flex-direction: column;
+    }
+}

@@ -1,0 +1,13 @@
+#Container {
+    width: 75vw;
+    height: 100%;
+    padding: 1em;
+    gap: 20px;
+}
+
+#facilityContainer {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 40px;
+}

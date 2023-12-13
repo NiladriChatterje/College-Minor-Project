@@ -1,0 +1,12 @@
+#root {
+  padding: 2rem;
+  display: flex;
+  gap: 30px;
+  height: 100dvh;
+}
+
+@media all and (max-width:1200px) {
+  #root {
+    flex-direction: column;
+  }
+}

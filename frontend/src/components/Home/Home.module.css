@@ -1,0 +1,29 @@
+#Container {
+    width: 75vw;
+    height: 100%;
+}
+
+#miniCardContainer {
+    width: 60%;
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+#QuickLinks {
+    border-left: 1px solid black;
+    padding: 1px 1em;
+}
+
+#upperSec {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.images {
+    height: 60px;
+    object-fit: contain;
+    margin: 0 45px;
+}

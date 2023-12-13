@@ -1,0 +1,17 @@
+export const Departments =[
+    {id:1,name:'Master of Computer Applications (MCA)',abbr:'MCA',semester:4},
+    {id:2,name:'Bachelor of Computer Applications (BCA)',abbr:'BCA',semester:6},
+    {id:3,name:'  Information Technology (IT)',abbr:'BTECH',semester:8},
+    {id:4,name: 'Computer Science & Engineering (CSE)',abbr:'BTECH',semester:8},
+    {id:5,name:'Computer Science & Business Studies (CSBS)',abbr:'BTECH',semester:8},
+    {id:6,name:'Biotechnology (BT)',abbr:'BTECH',semester:8},
+    {id:7,name:'Chemical Engineering (ChE)',abbr:'BTECH',semester:8},
+    {id:8,name:'Civil Engineering (CE)',abbr:'BTECH',semester:8},
+    {id:9,name:'Electrical Engineering (EE)',abbr:'BTECH',semester:8},
+    {id:10,name:'Information Technology (IT)',abbr:'BTECH',semester:8},
+    {id:11,name:'Artificial Intelligence (AI&ML)',abbr:'BTECH',semester:8},
+     {id:12,name:'Applied Electronics & Instrumentation (AEIE)',abbr:'BTECH',semester:8},
+     {id:13,name:'Mechanical Engineering (ME)',abbr:'BTECH',semester:8},
+     {id:14,name:'Data Sciense (DS)',abbr:'BTECH',semester:8},
+    {id:15,name:'Master of Business Administration (MBA)',abbr:'MBA',semester:6},
+]
