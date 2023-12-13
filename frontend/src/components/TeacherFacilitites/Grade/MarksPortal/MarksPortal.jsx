@@ -3,12 +3,7 @@ import styles from "./MarksPortal.module.css";
 //import { students } from "./StudentList.js";
 import toast from "react-hot-toast";
 import axios from "axios";
-import {
-  useContract,
-  useContractRead,
-  useContractWrite,
-  Web3Button,
-} from "@thirdweb-dev/react";
+import { ConnectWallet, useContract, useAddress } from "@thirdweb-dev/react";
 
 const precedenceAuthority = [
   { authority: "scrutinizer", dataToBeSetPreviously: "examiner" },
@@ -17,12 +12,11 @@ const precedenceAuthority = [
   { authority: "controller", dataToBeSetPreviously: "tabulator" },
 ];
 
-const address = "0xB5C0973DE00550778F709855c753C6E233d0f2bD";
+const address = "0x659B8d0153B8F233Bde6768e28ACa5aCa1232234";
 
 const MarksPortal = ({ department, semester, subject, authorityLevel }) => {
   const [studentList, setStudentList] = useState(() => []);
-
-  getPreviousAuthorityMarks();
+  const Address = useAddress();
   //successfully accomplished
   async function getListOfStudents(departmentID, semester, subject) {
     const { data } = await axios.post(
@@ -33,19 +27,11 @@ const MarksPortal = ({ department, semester, subject, authorityLevel }) => {
         departmentId: departmentID,
       }
     );
+
     console.log(data);
     setStudentList(data);
   }
   const { contract } = useContract(address);
-  const { mutateAsync, error } = useContractWrite(contract, "addMarks");
-  const { data } = useContractRead(contract, "authoritylevelCheck", [
-    department?.abbr,
-    `${semester}`,
-    `1`,
-    subject?.subject_code,
-    authorityLevel,
-  ]);
-  console.log(data);
 
   const studentRollRef = useRef([]);
   const examinerRef = useRef([]);
@@ -53,7 +39,8 @@ const MarksPortal = ({ department, semester, subject, authorityLevel }) => {
   const headExaminerRef = useRef([]);
   const tabulatorRef = useRef([]);
   const controllerRef = useRef([]);
-
+  const remarksRef = useRef([]);
+  const recordIdRef = useRef([]);
   //get previous authority marks
   async function getPreviousAuthorityMarks() {
     //precendence checking will be done in blockchain
@@ -66,78 +53,74 @@ const MarksPortal = ({ department, semester, subject, authorityLevel }) => {
       }
     );
     console.log(data);
-    if (authorityLevel === "examiner") return;
 
-    if (authorityLevel === "scrutinizer") {
-      const ExaminerMarksArray = examinerRef.current.map(
-        (item) => item && item
-      );
-      ExaminerMarksArray.map((item, i) => {
-        item.value = data[i].marks[0].marks;
-      });
-    } else if (authorityLevel === "headExaminer") {
-      const ExaminerMarksArray = examinerRef.current.map(
-        (item) => item && item
-      );
-      const ScrutinizerMarksArray = scrutinizerRef.current.map(
-        (item) => item && item
-      );
-      ExaminerMarksArray.map((item, i) => {
-        item.value = data[i].marks[0].marks;
-      });
-      ScrutinizerMarksArray.map((item, i) => {
-        item.value = data[i].marks[1]?.marks;
-      });
-    } else if (authorityLevel === "tabulator") {
-      const ExaminerMarksArray = examinerRef.current.map(
-        (item) => item && item
-      );
-      const ScrutinizerMarksArray = scrutinizerRef.current.map(
-        (item) => item && item
-      );
-      const headexaminerMarksArray = headExaminerRef.current.map(
-        (item) => item && item
-      );
-      ExaminerMarksArray.map((item, i) => {
-        item.value = data[i].marks[0]?.marks;
-      });
-      ScrutinizerMarksArray.map((item, i) => {
-        item.value = data[i].marks[1]?.marks;
-      });
-      headexaminerMarksArray.map((item, i) => {
-        item.value = data[i].marks[2]?.marks;
-      });
-    } else if (authorityLevel === "controller") {
-      const ExaminerMarksArray = examinerRef.current.map(
-        (item) => item && item
-      );
-      const ScrutinizerMarksArray = scrutinizerRef.current.map(
-        (item) => item && item
-      );
-      const headexaminerMarksArray = headExaminerRef.current.map(
-        (item) => item && item
-      );
-      const tabulatorMarksArray = tabulatorRef.current.map(
-        (item) => item && item
-      );
+    const ExaminerMarksArray = examinerRef.current.map((item) => item && item);
+    const ScrutinizerMarksArray = scrutinizerRef.current.map(
+      (item) => item && item
+    );
+    const headexaminerMarksArray = headExaminerRef.current.map(
+      (item) => item && item
+    );
+    const tabulatorMarksArray = tabulatorRef.current.map(
+      (item) => item && item
+    );
 
-      ExaminerMarksArray.map((item, i) => {
-        item.value = data[i].marks[0]?.marks;
-      });
-      ScrutinizerMarksArray.map((item, i) => {
-        item.value = data[i].marks[1]?.marks;
-      });
-      headexaminerMarksArray.map((item, i) => {
-        item.value = data[i].marks[2]?.marks;
-      });
-      tabulatorMarksArray.map((item, i) => {
-        item.value = data[i].marks[3]?.marks;
-      });
-    }
+    ExaminerMarksArray.map((item, i) => {
+      item.value =
+        data[i].marks[
+          data[i].marks.findIndex((temp) => temp.authorityLevel == "examiner")
+        ]?.marks;
+    });
+    ScrutinizerMarksArray.map((item, i) => {
+      item.value =
+        data[i].marks[
+          data[i].marks.findIndex(
+            (temp) => temp.authorityLevel == "scrutinizer"
+          )
+        ]?.marks;
+    });
+
+    headexaminerMarksArray.map((item, i) => {
+      item.value =
+        data[i].marks[
+          data[i].marks.findIndex(
+            (temp) => temp.authorityLevel == "headExaminer"
+          )
+        ]?.marks;
+    });
+    tabulatorMarksArray.map((item, i) => {
+      item.value =
+        data[i].marks[
+          data[i].marks.findIndex((temp) => temp.authorityLevel == "tabulator")
+        ]?.marks;
+    });
   }
 
   //yet to be done
-  function updateToDB() {
+  async function updateToDB() {
+    if (authorityLevel !== "examiner") {
+      let precededAuthority;
+      for (let i of precedenceAuthority)
+        if (i.authority == authorityLevel)
+          precededAuthority = i.dataToBeSetPreviously;
+
+      const data = await contract.call("authoritylevelCheck", [
+        department?.abbr,
+        semester,
+        studentList[0].student_id,
+        subject?.subject_code,
+        precededAuthority,
+      ]);
+
+      console.log(data);
+      if (!data) {
+        toast.error(
+          "Preceeded Authority Level has not given marks in this particular subject yet"
+        );
+        return;
+      }
+    }
+
     const newData = [];
     switch (authorityLevel) {
       case "examiner":
@@ -152,7 +135,6 @@ const MarksPortal = ({ department, semester, subject, authorityLevel }) => {
               marks: marksArray[i],
               remarks: "",
             });
-          console.log(newData);
         } else {
           toast.error("All Students didn't get marks.");
           return;
@@ -164,6 +146,7 @@ const MarksPortal = ({ department, semester, subject, authorityLevel }) => {
             newData.push({
               rollNo: studentList[i].student_id,
               marks: examinerRef.current[i].value,
+              recordId: studentList[i].recordId,
             });
         } else {
           toast.error("All Students didn't get marks.");
@@ -209,11 +192,37 @@ const MarksPortal = ({ department, semester, subject, authorityLevel }) => {
         break;
     }
 
+    const remarksArray = remarksRef.current.map(
+      (item) => (item && item.value) || "null"
+    );
+    console.log(remarksArray);
+    console.log(newData);
     putSubjectMarksAccordingAuthority(newData);
+    for (let i in newData) {
+      const temp = authorityLevel == "examiner" ? "" : remarksArray[i];
+      const params = [
+        department?.abbr,
+        semester,
+        newData[i].student_id,
+        parseInt(newData[i].marks),
+        subject?.subject_code,
+        authorityLevel,
+        temp,
+        Address,
+      ];
+      console.log(params);
+      const {
+        receipt: { confirmations },
+      } = await contract.call("addMarks", params);
+
+      if (confirmations) toast.success("Successfully Uploaded to Blockchain");
+      else toast.error("Something wrong!");
+    }
   }
 
   React.useEffect(() => {
     getListOfStudents(department?.id, semester, subject);
+    getPreviousAuthorityMarks();
   }, []);
 
   async function putSubjectMarksAccordingAuthority(newData) {
@@ -232,6 +241,7 @@ const MarksPortal = ({ department, semester, subject, authorityLevel }) => {
 
   return (
     <div style={{ width: "75vw" }}>
+      <ConnectWallet style={{ position: "absolute", right: 10, top: 10 }} />
       <div className={styles.tableLayout}>
         <h4>Roll No</h4>
         <h4>Examiner</h4>
@@ -239,6 +249,7 @@ const MarksPortal = ({ department, semester, subject, authorityLevel }) => {
         <h4>Head Examiner</h4>
         <h4>Tabulator</h4>
         <h4>Controller</h4>
+        <h4>Remarks</h4>
       </div>
       <hr />
       <div style={{ width: "100%" }}>
@@ -328,6 +339,18 @@ const MarksPortal = ({ department, semester, subject, authorityLevel }) => {
               max={100}
               min={0}
               ref={(el) => (controllerRef.current[i] = el)}
+            />
+            <input
+              className={styles.marksInputs}
+              disabled={authorityLevel === "examiner"}
+              style={{
+                cursor: authorityLevel === "examiner" && "not-allowed",
+                backgroundColor:
+                  authorityLevel !== "examiner"
+                    ? "white"
+                    : "rgb(245,245,245,0.85)",
+              }}
+              ref={(el) => (remarksRef.current[i] = el)}
             />
           </div>
         ))}

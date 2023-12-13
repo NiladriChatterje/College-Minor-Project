@@ -5,7 +5,7 @@
   height: 100dvh;
 }
 
-@media all and (max-width:1200px) {
+@media all and (max-width:800px) {
   #root {
     flex-direction: column;
   }

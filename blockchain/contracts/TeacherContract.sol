@@ -16,9 +16,9 @@ contract TeacherContract {
     mapping(address => TeacherDetails) public IDToTeacherDetails;
     TeacherDetails[] arr;
 
-    modifier authority() {
+    modifier authority(address _address) {
         require(
-            IDToTeacherDetails[msg.sender].checkExistence != false,
+            IDToTeacherDetails[_address].checkExistence != false,
             "Your do not have the authorization!"
         );
         _;

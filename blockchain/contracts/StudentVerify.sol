@@ -171,8 +171,13 @@ contract StudentVerify is TeacherContract {
         uint8 _Marks,
         string memory subject_code,
         string calldata authorityLevel,
-        string memory remarks
-    ) public remarksExceptExaminer(remarks, authorityLevel) authority {
+        string memory remarks,
+        address _writerAddress
+    )
+        public
+        remarksExceptExaminer(remarks, authorityLevel)
+        authority(_writerAddress)
+    {
         rollToSubCodeNum[department][_sem][_rollNo][subject_code][
             authorityLevel
         ] = _Marks;

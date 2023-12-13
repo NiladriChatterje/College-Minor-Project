@@ -181,9 +181,9 @@ export const getStudentMarks = async (info) => {
         });
 
         const transformedObject = {};
-
+        // console.log(studentMarks);
         studentMarks.forEach((entry) => {
-            const { studentName, studentId, departmentId, marks, authorityLevel, remarks } = entry;
+            const { id, studentName, studentId, departmentId, marks, authorityLevel, remarks } = entry;
 
             if (!transformedObject[studentId]) {
                 transformedObject[studentId] = {
@@ -195,6 +195,7 @@ export const getStudentMarks = async (info) => {
             }
 
             transformedObject[studentId].marks.push({
+                recordId: id,
                 marks,
                 authorityLevel,
                 remarks,

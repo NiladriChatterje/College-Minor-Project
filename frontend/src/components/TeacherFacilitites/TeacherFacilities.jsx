@@ -23,10 +23,9 @@ const TeacherFacilities = () => {
           gap: 20,
         }}
       >
-        <Cards w={250} direction={"row"} item={{ name: "Results" }} />
-        <Cards w={250} />
-        <Cards w={250} />
-        <Cards w={250} />
+        {lowerSec?.map((item, i) => (
+          <Cards key={i} w={250} direction={"row"} item={item} />
+        ))}
       </section>
     </div>
   );

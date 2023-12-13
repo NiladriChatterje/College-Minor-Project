@@ -19,16 +19,18 @@ const Grade = () => {
   function getSemesterOfDept(dept) {
     //backend work
     let deptID = null;
+    let deptAbbr = null;
     for (let i of Departments)
       if (i.abbr === dept) {
         semesterCountRef.current = i.semester;
         deptID = i?.id;
+        deptAbbr = i?.abbr;
         break;
       }
     setSubjectArray(() => []);
     setSemester(null);
     setSubject(null);
-    setDepartment({ name: dept, id: deptID });
+    setDepartment({ name: dept, id: deptID, abbr: deptAbbr });
   }
 
   async function getSubjectsFromSemAndDept(semester) {
@@ -43,14 +45,6 @@ const Grade = () => {
     console.log(data);
     setSubjectArray(data);
 
-    /* setSubjectArray([
-      {
-        subject_id: 1,
-        subject_code: "MCAP1102",
-        subject_name: "Data Structure and Algorithm (DSA)",
-      },
-      { subject_id: 2, subject_code: "MCAP1202", name: "Networking (NETW)" },
-    ]);*/
     setSubject(null);
     setSemester(semester);
   }
